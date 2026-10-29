@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <!-- 链接中可能携带密钥，禁止通过 Referer 外泄 -->
+  <meta name="referrer" content="no-referrer">
+  <title>私密内容</title>
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem("card-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="private" data-root="../">
+  <div class="page">
+    <header class="topbar" id="topbar"><!-- 由 ui.js 渲染 --></header>
+
+    <div class="view-bar">
+      <a class="back-link" href="index.html">← 返回通道列表</a>
+      <span class="ttl" id="ttl" hidden></span>
+    </div>
+
+    <main id="viewRoot"><!-- 由 view.js 渲染 --></main>
+
+    <footer class="site-footer">
+      <span>AES-256-GCM · 本地解密</span>
+      <span>关闭即清除</span>
+    </footer>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/ui.js"></script>
+  <script src="../assets/js/guard.js"></script>
+  <script src="../assets/js/crypto.js"></script>
+  <script src="channels.js"></script>
+  <script src="rotation.js"></script>
+  <script src="../assets/js/unlock.js"></script>
+  <script src="../assets/js/view.js"></script>
+</body>
+</html>

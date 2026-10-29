@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>技术</title>
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem("card-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="private" data-root="../">
+  <div class="page">
+    <a class="back-link" href="index.html">← 返回通道</a>
+
+    <main>
+      <section class="private-head">
+        <p class="eyebrow">Tech</p>
+        <h1>这个站，和我会的</h1>
+        <p class="lead">
+          这一页不需要密钥。写在这里是为了省掉「你都会些什么」那一轮试探——
+          先看东西，再决定要不要问。
+        </p>
+      </section>
+
+      <section class="lock-wrap">
+        <section class="lock-group">
+          <p class="lock-heading"><span>这个站本身</span><em>5 件</em></p>
+          <ul class="lock-list">
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">前端</span>
+                <span class="lock-value">原生 HTML / CSS / JavaScript。没有框架、没有构建流程、没有第三方依赖，仓库拉下来就能跑。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">加密</span>
+                <span class="lock-value">浏览器原生 Web Crypto：PBKDF2-SHA256 派生（20 万次）→ AES-256-GCM 加密，明文只在你的内存里出现。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">分享</span>
+                <span class="lock-value">HMAC-SHA256 密钥流封装数据密钥，做成带有效期、可一次性的链接；密钥本身不进链接明文。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">托管</span>
+                <span class="lock-value">GitHub Pages 纯静态，部署在子路径下。没有服务端、没有数据库，所以也没有「服务器被拖库」这一说。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">构建</span>
+                <span class="lock-value">Node.js 脚本负责离线加密内容、签发令牌、校验密文与密钥是否配套——加解密参数两边必须一字不差。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="lock-group">
+          <p class="lock-heading"><span>能力范围</span><em>按能独立交付写</em></p>
+          <ul class="lock-list">
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">主力语言</span>
+                <span class="lock-value">Java 8 年 · Python 4 年 · Go 2 年</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">中间件</span>
+                <span class="lock-value">Kafka、Redis、RabbitMQ、Nginx —— 用得最多的是 Kafka 的重放与顺序性</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">数据栈</span>
+                <span class="lock-value">Oracle、PostgreSQL、Spark、Flink、Hive；做过核心库迁移与异构数据同步</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">工程化</span>
+                <span class="lock-value">Docker、K8s、GitLab CI、灰度发布、链路追踪——从提交到上线的整条链路自己搭过</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">架构</span>
+                <span class="lock-value">微服务拆分、分库分表、幂等与最终一致性设计；调度平台核心链路重构，峰值吞吐约 10 倍</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="lock-group">
+          <p class="lock-heading"><span>不太行的</span><em>先说清楚</em></p>
+          <ul class="lock-list">
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">前端框架</span>
+                <span class="lock-value">能写，但不算强项。这个站是原生手写的，正好绕开了这一点。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">算法模型</span>
+                <span class="lock-value">到会调 API、会读论文的程度；训练、微调、推荐排序没做过上线项目。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">原生客户端</span>
+                <span class="lock-value">Android / iOS 没做过上线的东西，只到能改能调试。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+            <li class="lock-row">
+              <div class="lock-item is-static">
+                <span class="lock-label">值守运维</span>
+                <span class="lock-value">部署、排障、看监控都可以；7×24 的值班表不接。</span>
+                <span class="lock-mark"></span>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <p class="disclaimer">
+        以上是自我评估，按「能独立交付到什么程度」写，不按简历上的名词写。
+        更细的履历在「工作」那一栏里，那条需要密钥。
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <span>No key needed</span>
+      <span>这一页是公开的</span>
+    </footer>
+  </div>
+</body>
+</html>

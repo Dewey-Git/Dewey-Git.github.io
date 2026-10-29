@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>契合测试</title>
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem("card-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="private" data-root="../">
+  <div class="page">
+    <header class="topbar" id="topbar"><!-- 由 ui.js 渲染 --></header>
+
+    <main id="quizRoot"><!-- 由 soul-quiz.js 渲染 --></main>
+
+    <footer class="site-footer">
+      <span>完全契合的话，不需要密钥也能进</span>
+      <span>结果仅本机计算 · 不保存</span>
+    </footer>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/ui.js"></script>
+  <script src="../assets/js/guard.js"></script>
+  <script src="../assets/js/crypto.js"></script>
+  <script src="quiz.enc.js"></script>
+  <script src="../assets/js/quiz-bank.js"></script>
+  <script src="../assets/js/soul-quiz.js"></script>
+</body>
+</html>

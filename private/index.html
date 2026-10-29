@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>私密通道</title>
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem("card-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="private" data-root="../">
+  <div class="page">
+    <header class="topbar" id="topbar"><!-- 由 ui.js 渲染 --></header>
+
+    <a class="back-link" href="../index.html">← 返回公开名片</a>
+
+    <main>
+      <section class="private-head">
+        <p class="eyebrow">Private Channel</p>
+        <h1>私密通道</h1>
+        <p class="lead">
+          每个通道都以 AES-256-GCM 整段加密——页面在解锁前连有几个条目、字段叫什么都不知道，
+          只剩一个打码的内容框。点它一下，两条路就在框里铺开：输密钥，或者另一条不用密钥的。
+          解开后本机只保留 15 分钟。
+        </p>
+      </section>
+
+      <!-- 离线提示 -->
+      <div class="offline-card" id="offlineNotice" hidden>
+        <p class="offline-title">离线无法使用</p>
+        <p class="offline-desc">
+          检测到当前处于离线状态。私密内容需要在线解密校验，离线时仅可浏览公开名片页。
+        </p>
+        <a class="btn ghost" href="../index.html">返回公开名片</a>
+      </div>
+
+      <!-- 标签切换：工作 / 交友 / 契合 -->
+      <section class="channel-switch" aria-label="私密通道">
+        <div class="tabs" id="channelTabs" role="tablist" aria-label="通道标签"></div>
+        <div class="tab-panel" id="channels" role="tabpanel" aria-live="polite"></div>
+      </section>
+
+      <p class="form-msg is-error" id="envWarn" hidden>
+        当前浏览器环境不支持 Web Crypto（可能通过 file:// 打开）。请使用 https 或本地 http 服务器访问。
+      </p>
+
+      <p class="disclaimer">
+        本站为纯静态站点，客户端加密可防止随手窥探与搜索引擎收录，但不等同于银行级安全。
+        请勿存放真正不可泄露的机密（银行卡密码、完整证件号、一次性验证码）。
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <span>AES-256-GCM · PBKDF2 200k</span>
+      <span>Decryption happens locally</span>
+    </footer>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/ui.js"></script>
+  <script src="../assets/js/guard.js"></script>
+  <script src="../assets/js/crypto.js"></script>
+  <script src="channels.js"></script>
+  <script src="rotation.js"></script>
+  <script src="../assets/js/unlock.js"></script>
+  <script src="../assets/js/private.js"></script>
+</body>
+</html>

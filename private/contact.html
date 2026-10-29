@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>交流</title>
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem("card-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="private" data-root="../">
+  <div class="page">
+    <a class="back-link" href="index.html">← 返回通道</a>
+
+    <main>
+      <section class="private-head">
+        <p class="eyebrow">Say Hi</p>
+        <h1>交流</h1>
+        <p class="lead">
+          不加好友也能先说话。下面这些是能加的，点一下就复制或跳转；
+          灰着的那两个暂时不加人，点了它只会自己淡掉。
+        </p>
+      </section>
+
+      <section class="contact-card" id="contactCard">
+        <ul class="contact-list" id="contactList"><!-- 由 contact.js 渲染 --></ul>
+        <p class="contact-msg" id="contactMsg" role="status"></p>
+      </section>
+
+      <p class="disclaimer">
+        这一页只从「交友 → 交流」进来，公开名片页上不出现。
+        要是不想在这里留痕迹，直接关掉页面就行，什么都不会保存。
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <span>No key needed</span>
+      <span>这一页也是公开的</span>
+    </footer>
+  </div>
+
+  <script src="contact.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var data = window.PRIVATE_CONTACT || { items: [] };
+      var listEl = document.getElementById("contactList");
+      var msgEl = document.getElementById("contactMsg");
+      if (!listEl) return;
+
+      var timer = null;
+
+      function say(text) {
+        if (!msgEl) return;
+        msgEl.textContent = text;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () {
+          msgEl.textContent = "";
+        }, 2600);
+      }
+
+      /* 复制：优先 clipboard，失败则退回选中文本 */
+      function copy(text, done) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, function () {
+            fallback(text, done);
+          });
+        } else {
+          fallback(text, done);
+        }
+      }
+
+      function fallback(text, done) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+        } catch (e) {
+          /* 复制不了也不报错，文本已经选中了 */
+        }
+        document.body.removeChild(ta);
+        done();
+      }
+
+      function rowOf(item) {
+        var li = document.createElement("li");
+        li.className = "contact-row" + (item.closed ? " is-closed" : "");
+
+        var label = document.createElement("span");
+        label.className = "contact-label";
+        label.textContent = item.label;
+
+        var value = document.createElement("span");
+        value.className = "contact-value";
+        value.textContent = item.closed ? "暂时不加人" : item.value;
+
+        var act = document.createElement(item.closed ? "button" : item.href ? "a" : "button");
+        act.className = "contact-act";
+        if (act.tagName === "A") {
+          act.href = item.href;
+          act.textContent = "打开 →";
+        } else if (item.closed) {
+          act.type = "button";
+          act.textContent = "—";
+          act.setAttribute("aria-label", item.label + "：暂时不加人");
+        } else {
+          act.type = "button";
+          act.textContent = "复制";
+        }
+
+        li.appendChild(label);
+        li.appendChild(value);
+        li.appendChild(act);
+
+        /* 灰着的这两条：不跳转，点一下只让这条淡出 */
+        if (item.closed) {
+          act.addEventListener("click", function () {
+            li.classList.add("is-gone");
+            say(item.label + " 这条先不加人。");
+            setTimeout(function () {
+              if (li.parentNode) li.parentNode.removeChild(li);
+            }, 620);
+          });
+        } else if (act.tagName === "BUTTON") {
+          act.addEventListener("click", function () {
+            copy(item.value, function () {
+              say("已复制 " + item.label + "：" + item.value);
+            });
+          });
+        }
+
+        return li;
+      }
+
+      var shown = 0;
+      (data.items || []).forEach(function (item) {
+        if (!item || !item.label) return;
+        if (!item.closed && !item.value) return; /* 没填的那条不占一行 */
+        listEl.appendChild(rowOf(item));
+        shown += 1;
+      });
+
+      if (!shown) {
+        var empty = document.createElement("li");
+        empty.className = "contact-empty";
+        empty.textContent = "这一页还没填联系方式。";
+        listEl.appendChild(empty);
+      }
+    })();
+  </script>
+</body>
+</html>

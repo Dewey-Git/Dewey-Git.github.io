@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="mono">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<title>内容加密台 · 电子名片</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0a0a0b;
+    --surface: #121214;
+    --surface-2: #17171a;
+    --fg: #f2f0ec;
+    --muted: #918e88;
+    --faint: #6b6862;
+    --line: rgba(255,255,255,.12);
+    --line-strong: rgba(255,255,255,.24);
+    --accent: #e9e5dc;
+    --accent-fg: #0a0a0b;
+    --ok: #7fc98a;
+    --bad: #e2857d;
+    --warn: #d9b26a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 32px 20px 80px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+
+  header { margin-bottom: 28px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; letter-spacing: .02em; }
+  .sub { color: var(--muted); margin: 0; font-size: 13px; }
+  .badges { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 9px; border: 1px solid var(--line); color: var(--muted);
+    border-radius: 999px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    margin-bottom: 14px;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .card-head h2, .label {
+    font-size: 13px; font-weight: 600; margin: 0; letter-spacing: .02em;
+  }
+  .card-head h2 span { color: var(--faint); font-weight: 400; margin-left: 6px; font-size: 12px; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  button {
+    font: inherit; font-size: 12px;
+    color: var(--fg); background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px; padding: 5px 11px; cursor: pointer;
+    transition: background .15s, border-color .15s, opacity .15s;
+  }
+  button:hover { background: #1e1e22; }
+  button:active { transform: translateY(.5px); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary {
+    background: var(--accent); color: var(--accent-fg);
+    border-color: var(--accent); font-size: 13px; padding: 8px 18px; font-weight: 600;
+  }
+  button.primary:hover { background: #fff; }
+  button.is-on { border-color: var(--accent); color: var(--accent); }
+
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line-strong); background: transparent;
+    border-radius: 999px; padding: 6px 14px; font-size: 13px;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--accent); color: var(--accent-fg); border-color: var(--accent);
+  }
+  .chip small { display: block; font-size: 10px; opacity: .68; letter-spacing: .04em; }
+
+  textarea, input[type="text"], input[type="password"] {
+    width: 100%; display: block;
+    background: #0d0d0f; color: var(--fg);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 11px 12px; font-size: 12.5px; line-height: 1.55;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    outline: none; resize: vertical;
+  }
+  textarea:focus, input:focus { border-color: var(--line-strong); }
+  textarea { min-height: 240px; }
+  textarea.tall { min-height: 300px; }
+  input { height: 40px; }
+
+  .hint { margin: 8px 0 0; font-size: 12px; color: var(--muted); min-height: 18px; }
+  .hint.ok { color: var(--ok); }
+  .hint.bad { color: var(--bad); }
+  .hint.warn { color: var(--warn); }
+
+  .msg { margin: 10px 0 0; font-size: 12.5px; min-height: 18px; color: var(--muted); }
+  .msg.ok { color: var(--ok); }
+  .msg.bad { color: var(--bad); }
+
+  hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .grow { flex: 1 1 220px; }
+
+  .foot {
+    margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12px;
+  }
+  .foot b { color: var(--fg); font-weight: 600; }
+  .foot ul { margin: 8px 0 0; padding-left: 18px; }
+  .foot li { margin: 4px 0; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--surface-2); padding: 1px 5px; border-radius: 4px;
+    font-size: 11.5px; color: var(--fg);
+  }
+  .out-list { display: grid; gap: 10px; }
+  @media (max-width: 620px) {
+    body { padding: 20px 14px 60px; }
+    .card { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>内容加密台</h1>
+    <p class="sub">把改好的 JSON 加密成 <code>.enc.js</code>，再把生成的文件粘回项目。算法与 <code>tools/rotate.js</code> 逐字节一致。</p>
+    <div class="badges">
+      <span class="badge">纯本地 · 不联网</span>
+      <span class="badge">密钥不写盘、不进 localStorage</span>
+      <span class="badge">PBKDF2 200000 · AES-256-GCM</span>
+    </div>
+  </header>
+
+  <section class="card">
+    <p class="label" style="margin-bottom:10px">① 改哪个通道</p>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>② 明文 JSON <span id="plainFrom"></span></h2>
+      <div class="tools">
+        <button type="button" id="pickFile">打开 json 文件</button>
+        <button type="button" id="loadData">从 data/ 载入</button>
+      </div>
+    </div>
+    <textarea id="plain" spellcheck="false" placeholder="{&#10;  &quot;title&quot;: &quot;公司渠道&quot;,&#10;  &quot;sections&quot;: [ ... ]&#10;}"></textarea>
+    <p class="hint" id="structHint">还没有内容。</p>
+    <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>③ 主密钥 <span>（data/keys.json 里对应通道那一把）</span></h2>
+      <div class="tools">
+        <button type="button" id="toggleKey">显示</button>
+        <button type="button" id="loadKeys">从 keys.json 载入</button>
+      </div>
+    </div>
+    <input id="dek" type="password" spellcheck="false" autocomplete="off"
+           placeholder="64 位十六进制，例如 e9d5582b…">
+    <p class="hint" id="keyHint">密钥只在这个输入框和内存里。</p>
+  </section>
+
+  <section class="card">
+    <button type="button" class="primary" id="go">加密并生成文件</button>
+    <p class="msg" id="msg"></p>
+  </section>
+
+  <section class="card" id="out" hidden>
+    <div class="card-head">
+      <h2 id="outName">interview.enc.js</h2>
+      <div class="tools">
+        <button type="button" data-copy="outEnc">复制全文</button>
+        <button type="button" id="dlEnc">下载 .enc.js</button>
+      </div>
+    </div>
+    <textarea id="outEnc" readonly class="tall"></textarea>
+
+    <hr>
+
+    <div class="card-head">
+      <h2>rotation.js <span>把这一段替换掉原来同名的块</span></h2>
+      <div class="tools"><button type="button" data-copy="outRot">复制这一段</button></div>
+    </div>
+    <textarea id="outRot" readonly style="min-height:120px"></textarea>
+
+    <p class="hint" id="pushHint"></p>
+  </section>
+
+  <div class="foot">
+    <b>替换规则（别漏）</b>
+    <ul>
+      <li>正文：<code>private/channels/&lt;通道&gt;.enc.js</code> 整个文件覆盖</li>
+      <li>记录：<code>private/rotation.js</code> 里该通道的 <code>keyId</code> 与 <code>issuedAt</code> 换成新值 —— 管理台靠它显示「#keyId」，不换会显示旧值，但不影响解密</li>
+      <li>这两个文件要<strong>一起推</strong>。只推一个，管理台自检会亮 ⚠</li>
+      <li>题库不在这里：改 <code>data/quiz.json</code> 后用 <code>node tools/build-quiz.js</code>（它要重签免密钥令牌）</li>
+      <li>管理员密码也不在这里：<code>node tools/set-admin.js "&lt;新密码&gt;"</code></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* 与 tools/lib.js、assets/js/config.js 保持一致 */
+  var ITER = 200000;
+
+  var CHANNELS = [
+    { id: "interview", name: "工作", file: "interview.json" },
+    { id: "dating", name: "交友", file: "dating.json" },
+    { id: "soul", name: "契合", file: "soul.json" }
+  ];
+
+  var state = { channel: CHANNELS[0], enc: "", rot: "", fileName: "" };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var enc = new TextEncoder();
+  var dec = new TextDecoder();
+
+  /* ---------- 编码小工具 ---------- */
+  function b64(bytes) {
+    var out = "";
+    var chunk = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunk) {
+      out += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    }
+    return btoa(out);
+  }
+
+  function unb64(s) {
+    var raw = atob(s);
+    var out = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+    return out;
+  }
+
+  function hexOf(buf) {
+    var b = new Uint8Array(buf);
+    var s = "";
+    for (var i = 0; i < b.length; i++) s += ("0" + b[i].toString(16)).slice(-2);
+    return s;
+  }
+
+  function sha256Hex(str) {
+    return crypto.subtle.digest("SHA-256", enc.encode(str)).then(hexOf);
+  }
+
+  /* ---------- 加密（与 rotate.js 同参数） ---------- */
+  function encryptPayload(plaintext, dek) {
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+
+    return crypto.subtle
+      .importKey("raw", enc.encode(dek), { name: "PBKDF2" }, false, ["deriveKey"])
+      .then(function (base) {
+        return crypto.subtle.deriveKey(
+          { name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" },
+          base,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["encrypt", "decrypt"]
+        );
+      })
+      .then(function (key) {
+        return crypto.subtle
+          .encrypt({ name: "AES-GCM", iv: iv, tagLength: 128 }, key, enc.encode(plaintext))
+          .then(function (ct) {
+            return sha256Hex(dek).then(function (h) {
+              var keyId = h.slice(0, 8);
+              return {
+                keyId: keyId,
+                key: key,
+                iv: iv,
+                payload: {
+                  v: 1,
+                  iter: ITER,
+                  salt: b64(salt),
+                  iv: b64(iv),
+                  ct: b64(new Uint8Array(ct)),
+                  keyId: keyId,
+                  scheme: "dek"
+                }
+              };
+            });
+          });
+      });
+  }
+
+  /* 用同一把钥匙解回来，逐字节比对：这一步过了，线上就一定解得开 */
+  function selfCheck(result, plaintext) {
+    return crypto.subtle
+      .decrypt({ name: "AES-GCM", iv: result.iv, tagLength: 128 }, result.key, unb64(result.payload.ct))
+      .then(function (buf) { return dec.decode(buf) === plaintext; });
+  }
+
+  /* ---------- 生成文件文本（格式与 lib.js 一致） ---------- */
+  function encFileText(id, payload, keyId, iso) {
+    return (
+      "/* AUTO-GENERATED by tools/rotate.js — 请勿手工编辑 */\n" +
+      "/* channel: " + id + " · keyId: " + keyId + " · " + iso + " */\n" +
+      "window.PRIVATE_CHANNELS = window.PRIVATE_CHANNELS || {};\n" +
+      "window.PRIVATE_CHANNELS[" + JSON.stringify(id) + "] = " +
+      JSON.stringify(payload, null, 2) +
+      ";\n"
+    );
+  }
+
+  function rotBlockText(id, keyId, iso) {
+    var rec = { keyId: keyId, issuedAt: iso, scheme: "dek" };
+    return "  " + JSON.stringify(id) + ": " +
+      JSON.stringify(rec, null, 2).replace(/\n/g, "\n  ");
+  }
+
+  /* ---------- 结构检查 ---------- */
+  function inspect(text) {
+    if (!text.trim()) return { empty: true };
+    var obj;
+    try {
+      obj = JSON.parse(text);
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
+      return { ok: false, error: "顶层必须是对象 { title, sections: [...] }" };
+    }
+    var secs = Array.isArray(obj.sections) ? obj.sections : [];
+    var count = 0;
+    var names = [];
+    secs.forEach(function (s) {
+      var arr = (s && (s.fields || s.items)) || [];
+      count += arr.length;
+      arr.forEach(function (f) {
+        if (f && f.label) names.push(f.label);
+      });
+    });
+    return {
+      ok: true,
+      title: obj.title || "(无 title)",
+      sections: secs.length,
+      fields: count,
+      names: names
+    };
+  }
+
+  function renderStruct() {
+    var r = inspect($("plain").value);
+    var el = $("structHint");
+    el.className = "hint";
+
+    if (r.empty) {
+      el.textContent = "还没有内容。粘贴 JSON，或点右上角「打开 json 文件」。";
+      return;
+    }
+    if (!r.ok) {
+      el.className = "hint bad";
+      el.textContent = "JSON 解析失败：" + r.error;
+      return;
+    }
+    el.className = "hint ok";
+    el.textContent =
+      "✓ " + r.sections + " 节 / " + r.fields + " 条 · 标题：" + r.title +
+      (r.names.length ? " · " + r.names.slice(0, 4).join("、") + (r.names.length > 4 ? "…" : "") : "");
+  }
+
+  /* ---------- 通道切换 ---------- */
+  function renderChips() {
+    var box = $("chips");
+    box.innerHTML = "";
+    CHANNELS.forEach(function (c) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.setAttribute("aria-pressed", c.id === state.channel.id ? "true" : "false");
+      b.innerHTML = c.name + "<small>" + c.id + ".enc.js</small>";
+      b.addEventListener("click", function () {
+        state.channel = c;
+        renderChips();
+        $("plainFrom").textContent = "";
+        $("out").hidden = true;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* ---------- 提示 ---------- */
+  function setMsg(text, kind) {
+    var el = $("msg");
+    el.className = "msg" + (kind ? " " + kind : "");
+    el.textContent = text || "";
+  }
+
+  function setKeyHint() {
+    var v = $("dek").value.trim();
+    var el = $("keyHint");
+    el.className = "hint";
+    if (!v) {
+      el.textContent = "密钥只在这个输入框和内存里。";
+      return;
+    }
+    if (/^[0-9a-f]{64}$/i.test(v)) {
+      el.className = "hint ok";
+      el.textContent = "✓ 64 位十六进制，和 data/keys.json 的格式一致。";
+    } else {
+      el.className = "hint warn";
+      el.textContent = "⚠ 不是 64 位十六进制。也能加密，但要保证和分享链接用的口令完全一致。";
+    }
+  }
+
+  /* ---------- 读本地文件（http 打开时可用） ---------- */
+  function fetchText(url) {
+    return fetch(url, { cache: "no-store" }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    });
+  }
+
+  $("loadData").addEventListener("click", function () {
+    var url = "../data/" + state.channel.file;
+    fetchText(url)
+      .then(function (text) {
+        $("plain").value = text;
+        renderStruct();
+        $("plainFrom").textContent = "已从 " + url + " 载入";
+        $("out").hidden = true;
+        setMsg("");
+      })
+      .catch(function (e) {
+        setMsg("读不到 " + url + "（" + e.message + "）。用「打开 json 文件」选它，或先在本目录起个本地服务。", "bad");
+      });
+  });
+
+  $("loadKeys").addEventListener("click", function () {
+    var url = "../data/keys.json";
+    fetchText(url)
+      .then(function (text) {
+        var table = JSON.parse(text);
+        var k = table[state.channel.id];
+        if (!k) throw new Error("keys.json 里没有 " + state.channel.id);
+        $("dek").value = k;
+        setKeyHint();
+      })
+      .catch(function (e) {
+        setMsg("读不到 " + url + "（" + e.message + "）。手动从 data/keys.json 复制那一把。", "bad");
+      });
+  });
+
+  /* ---------- 打开本地 JSON ---------- */
+  $("pickFile").addEventListener("click", function () {
+    $("fileInput").click();
+  });
+
+  $("fileInput").addEventListener("change", function () {
+    var f = this.files && this.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      $("plain").value = String(reader.result || "");
+      state.fileName = f.name;
+      renderStruct();
+      $("plainFrom").textContent = "来自 " + f.name;
+      $("out").hidden = true;
+      setMsg("");
+      if (f.name !== state.channel.file) {
+        setMsg("注意：文件名是 " + f.name + "，当前通道是 " + state.channel.id + "（" + state.channel.file + "）。确认没选错通道。", "warn");
+      }
+    };
+    reader.readAsText(f);
+  });
+
+  /* ---------- 显隐密钥 ---------- */
+  $("toggleKey").addEventListener("click", function () {
+    var input = $("dek");
+    var show = input.type === "password";
+    input.type = show ? "text" : "password";
+    this.textContent = show ? "隐藏" : "显示";
+    this.classList.toggle("is-on", show);
+  });
+
+  $("dek").addEventListener("input", setKeyHint);
+
+  /* ---------- 加密 ---------- */
+  $("go").addEventListener("click", function () {
+    if (!window.crypto || !crypto.subtle) {
+      setMsg("这个浏览器环境没有 Web Crypto。请用 Chrome/Edge 打开，或改用 node tools/rotate.js。", "bad");
+      return;
+    }
+
+    var plaintext = $("plain").value;
+    var r = inspect(plaintext);
+    if (r.empty) return setMsg("先粘一份 JSON 进来。", "bad");
+    if (!r.ok) return setMsg("JSON 有问题：" + r.error, "bad");
+
+    var dek = $("dek").value.trim();
+    if (!dek) return setMsg("还差主密钥。点「从 keys.json 载入」或手动粘。", "bad");
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = "加密中…";
+    setMsg("PBKDF2 二十万次，大概要一两秒。");
+
+    var iso = new Date().toISOString();
+
+    encryptPayload(plaintext, dek)
+      .then(function (result) {
+        return selfCheck(result, plaintext).then(function (same) {
+          if (!same) throw new Error("自检失败：解回来的内容和原文不一致");
+          return result;
+        });
+      })
+      .then(function (result) {
+        state.enc = encFileText(state.channel.id, result.payload, result.keyId, iso);
+        state.rot = rotBlockText(state.channel.id, result.keyId, iso);
+
+        $("outName").textContent = state.channel.id + ".enc.js";
+        $("outEnc").value = state.enc;
+        $("outRot").value = state.rot;
+        $("pushHint").className = "hint";
+        $("pushHint").textContent =
+          "要推两个文件：private/channels/" + state.channel.id + ".enc.js 和 private/rotation.js。" +
+          "改完先跑 node tools/package.js，再一起推。";
+        $("out").hidden = false;
+        $("out").scrollIntoView({ behavior: "smooth", block: "start" });
+
+        setMsg(
+          "✓ 已加密并自检通过 · " + r.sections + " 节 " + r.fields + " 条 · keyId " + result.keyId +
+          " · 密文 " + Math.round(result.payload.ct.length * 0.75 / 1024) + " KB",
+          "ok"
+        );
+      })
+      .catch(function (e) {
+        setMsg("加密失败：" + e.message, "bad");
+      })
+      .then(function () {
+        btn.disabled = false;
+        btn.textContent = "加密并生成文件";
+      });
+  });
+
+  /* ---------- 复制 / 下载 ---------- */
+  document.addEventListener("click", function (ev) {
+    var btn = ev.target.closest("[data-copy]");
+    if (!btn) return;
+    var ta = $(btn.getAttribute("data-copy"));
+    if (!ta || !ta.value) return;
+
+    var done = function () {
+      var old = btn.textContent;
+      btn.textContent = "已复制";
+      setTimeout(function () { btn.textContent = old; }, 1200);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(done, function () {
+        ta.focus();
+        ta.select();
+        try { document.execCommand("copy"); done(); } catch (e) { /* 选中了，手动复制 */ }
+      });
+    } else {
+      ta.focus();
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { /* 同上 */ }
+    }
+  });
+
+  $("dlEnc").addEventListener("click", function () {
+    if (!state.enc) return;
+    var blob = new Blob([state.enc], { type: "text/javascript;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = state.channel.id + ".enc.js";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  });
+
+  /* ---------- 启动 ---------- */
+  renderChips();
+  renderStruct();
+  $("plain").addEventListener("input", function () {
+    renderStruct();
+    $("plainFrom").textContent = "";
+  });
+
+  if (!window.crypto || !crypto.subtle) {
+    setMsg("这个环境没有 Web Crypto（crypto.subtle）。用 Chrome/Edge 打开，或起一个 http 服务再访问。", "bad");
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "dewey-business-card",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Dewey 电子名片 · 纯静态 + 客户端零知识加密（GitHub Pages）",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "encrypt": "node tools/rotate.js",
+    "ticket": "node tools/rotate.js",
+    "package": "node tools/package.js",
+    "verify": "node tools/verify.js"
+  }
+}

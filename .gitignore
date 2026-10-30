@@ -1,0 +1,22 @@
+# ===== 机密：明文内容与主密钥，绝对不能进公开仓库 =====
+data/
+
+# ===== 不上传 README（本地保留即可） =====
+readme.md
+README.md
+
+# ===== 发布产物 =====
+dist/
+
+# ===== 依赖（当前工具链只用 Node 标准库，预留） =====
+node_modules/
+
+# ===== 素材原图（仅本地留档，不部署） =====
+assets/img/originals/
+
+# ===== 本地工具/编辑器数据 =====
+.workbuddy/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini

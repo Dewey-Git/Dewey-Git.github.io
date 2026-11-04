@@ -183,11 +183,20 @@
       picked.push(x);
     });
 
+    /* 每题生成一个随机选项排列，让正确答案不在固定位置（A），
+       但不改动评分——data-pick 仍存原始下标，scoreOf 不受影响。
+       排列存进 state，刷新/回退都稳定。 */
+    var perms = {};
+    picked.forEach(function (x) {
+      perms[x.id] = shuffle([0, 1, 2, 3]);
+    });
+
     return {
       ids: picked.map(function (x) {
         return x.id;
       }),
       answers: {},
+      perms: perms,
       idx: 0,
       affinity: 0,
       phase: "question",
@@ -286,11 +295,13 @@
     var stage = idx < 5 ? 1 : idx < 15 ? 2 : 3;
     var pct = Math.round((idx / state.ids.length) * 100);
 
-    var opts = q.o
-      .map(function (o, i) {
+    var perm = (state.perms && state.perms[q.id]) || [0, 1, 2, 3];
+    var opts = perm
+      .map(function (origIdx, pos) {
+        var o = q.o[origIdx];
         return (
-          '<button class="q-choice" type="button" data-pick="' + i + '">' +
-          '<span class="q-key">' + "ABCD".charAt(i) + "</span>" +
+          '<button class="q-choice" type="button" data-pick="' + origIdx + '">' +
+          '<span class="q-key">' + "ABCD".charAt(pos) + "</span>" +
           "<span>" + C.esc(o[0]) + "</span></button>"
         );
       })

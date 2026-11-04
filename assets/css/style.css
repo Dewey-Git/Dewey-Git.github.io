@@ -36,9 +36,9 @@
   --faint: #6b6862;
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.24);
-  --accent: #e9e5dc;
+  --accent: #16151a;
   --accent-fg: #0a0a0b;
-  --swatch: #f2f0ec;
+  --swatch: #16151a;
   --sig-filter: none;
 }
 
@@ -54,9 +54,9 @@
   --faint: #6b6862;
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.26);
-  --accent: #e9e5dc;
+  --accent: #16151a;
   --accent-fg: #0a0a0b;
-  --swatch: #f2f0ec;
+  --swatch: #16151a;
 }
 
 /* 纸白 */
@@ -70,9 +70,9 @@
   --faint: #8d8a83;
   --line: rgba(0, 0, 0, 0.12);
   --line-strong: rgba(0, 0, 0, 0.28);
-  --accent: #16151a;
+  --accent: #e9e5dc;
   --accent-fg: #f6f5f2;
-  --swatch: #16151a;
+  --swatch: #f2f0ec;
 }
 
 /* 靛蓝（浅色冷调） */

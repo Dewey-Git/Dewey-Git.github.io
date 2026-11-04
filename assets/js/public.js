@@ -61,8 +61,7 @@
       { label: "职称", value: c.role || PROFILE.position },
       { label: "集团", value: c.company || PROFILE.company },
       { label: "部门", value: c.department },
-      { label: "工作地点", value: c.location },
-      { label: "技术方向", value: c.focus }
+      { label: "工作地点", value: c.location }
     ]
       .filter(function (r) { return !!r.value; })
       .map(function (r) {

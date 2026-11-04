@@ -8,8 +8,8 @@
   "use strict";
 
   var THEMES = [
-    { id: "mono", name: "墨黑", color: "#f2f0ec" },
-    { id: "paper", name: "纸白", color: "#16151a" },
+    { id: "mono", name: "墨黑", color: "#16151a" },
+    { id: "paper", name: "纸白", color: "#f2f0ec" },
     { id: "ink", name: "靛蓝", color: "#2f5bd0" },
     { id: "wine", name: "酒红", color: "#8c2f3c" },
     { id: "forest", name: "松绿", color: "#2f6b47" }
